@@ -1,0 +1,194 @@
+﻿
+@{
+    ViewBag.Title = "Index2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div>&nbsp;&nbsp;</div>
+
+
+<div class="panel panel-success" ng-controller="videoController">
+    <div class="panel-heading">
+        <div class="panel-title">{{TitleName}} List</div>
+    </div>
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <tbody ng-if="states.showVideoForm">
+                    <tr>
+                    <td>
+                        <div style="position: relative;">
+                            <a class='btn btn-info' href='javascript:;'>
+                                <span class="glyphicon glyphicon-upload"></span>
+                                Upload
+                                <input type="file" id="UploadvdoFile" style='position: absolute; z-index: 2; top: 0; left: 0; filter: alpha(opacity=0); -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; opacity: 0; background-color: transparent; color: transparent;' name="file_source" size="40" onchange='$("#upload-vfile-info").html($(this).val());'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-vfile-info"></span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon">Video Name</span>
+                            <input type="text" class="form-control" placeholder="Video Name" ng-model="new.Video.VideoName">
+                        </div>
+                    </td>
+                </tr>
+
+                    <tr>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon">Category:</span>
+                            <select class="form-control" ng-model="new.Video.CategoryId">
+                                    <option ng-repeat="option in categoryList" value="{{option.CategoryId}}">{{option.CategoryName}}</option>
+                                </select>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon">Label:</span>
+                            <select class="form-control" ng-model="new.Video.Label" ng-options="label for label in LabelList">
+                                @*<option ng-repeat="label in LabelList" value="{{label}}">{{label}}</option>*@
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+
+                    <tr>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon">Ratings</span>
+                            <input type="number" class="form-control" size="5" ng-model="new.Video.Ratings">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon">Lecturer</span>
+                            <input type="text" class="form-control" ng-model="new.Video.Lecturer">
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-primary" ng-click="addVideo()"> Add</button>
+                        <button type="button" class="btn btn-default" ng-click="showVideoForm(false)">Cancel</button>
+                    </td>
+                    <td>
+                        <div style="color: red;" ng-if="states.errorVideo">Please all field required for video info.</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <a ng-click="showVideoForm(true)" class="btn btn-primary">Add Video</a>
+        </div>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                <tr>
+                    <th>Video</th>
+                    <th>VideoName</th>
+                    <th>Category</th>
+                    <th>Label</th>
+                    <th>Ratings</th>
+                    <th>Lecturer</th>
+                    <th>Publish Date</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="video in VideoList" ng-init="row={}" ng-switch="row.edit">
+                <tr ng-switch-default>
+                    <td>
+                        <video width="250" height="140" controls>
+                            <source ng-src="{{video.FilePath}}" type="video/mp4"/>
+                        </video>
+                    </td>
+                    <td>{{video.VideoName}}</td>
+                    <td ng-repeat="category in categoryList" ng-if="category.CategoryId==video.CategoryId">
+                        {{category.CategoryName}}
+                    </td>
+                    <td>{{video.Label}}</td>
+                    <td>{{video.Ratings}}</td>
+                    <td>{{video.Lecturer}}</td>
+                    <td ng-date>{{DateSplit(video.PublishDate) | date: 'dd-MM-yyyy'}}</td>
+                    <td>
+                        <button class="btn btn-danger" ng-click="DeleteVideo($index,video.VideoUploadId)"><span class="glyphicon glyphicon-trash">Trash</span></button>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="button" class="btn btn-warning btn-group-sm" ng-click="row.edit=true">
+                            <span class="glyphicon glyphicon-edit"></span> Edit
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-switch-when="true">
+                    
+                    <td>
+                        <input type="text" ng-model="video.FilePath" hidden="hidden" />
+                        <div style="position: relative;">
+                            <a class='btn btn-info' href='javascript:;'>
+                                <span class="glyphicon glyphicon-upload"></span>
+                                Upload
+                                <input type="file" id="evdoFileUpload" style='position: absolute; z-index: 2; top: 0; left: 0; filter: alpha(opacity=0); -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)"; opacity: 0; background-color: transparent; color: transparent;' name="file_source" size="40" onchange='$("#upload-efile-info").html($(this).val());'>
+                            </a>
+                            &nbsp;
+                            <span class='label label-info' id="upload-efile-info"></span>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="video.VideoName" ng-value="video.VideoName" aria-describedby=" vdoname">
+                        </div>
+                    </td>
+                    <td>
+                        <select class="form-control" ng-model="video.CategoryId">
+                            <option ng-repeat="option in categoryList" value="{{option.CategoryId}}">{{option.CategoryName}}</option> 
+                        </select>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <select class="form-control" ng-model="video.Label" ng-options="label for label in LabelList track by label"></select>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="vdoRating">Ratings</span>
+                            <input type="number" class="form-control" size="5" ng-model="video.Ratings" ng-value="video.Ratings" aria-describedby=" vdorating">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="vdoLecturer">Lecturer</span>
+                            <input type="text" class="form-control" ng-model="video.Lecturer" ng-value="video.Lecturer" aria-describedby=" vdolecturer">
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="vdoDate" ng-model="video.PublishDate">{{date | date:'dd-MM-yyyy'}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success btn-group-sm" ng-click="EditVideo(video);row.edit=false">
+                            <span class="glyphicon glyphicon-save"></span> Save
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+       
+    </div>
+
+</div>
+
+
+@section Scripts{
+    <script src="~/CustomScript/Angular/app.js"></script>
+    <script src="~/CustomScript/Angular/VideoCtrl.js"></script>
+}

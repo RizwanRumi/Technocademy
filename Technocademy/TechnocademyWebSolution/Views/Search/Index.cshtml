@@ -1,0 +1,301 @@
+﻿    @{
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        <style>
+            .starIcon {
+                clear: both;
+                float: left;
+                height: 25px;
+            }
+
+            .grid-header {
+                -ms-border-radius: 3px;
+                border-radius: 3px;
+                border-color: #ddd #ddd #ccc;
+                border-style: solid;
+                border-width: 1px;
+                -webkit-box-shadow: 0 1px 0 #f7f7f7 inset;
+                -ms-box-shadow: 0 1px 0 #f7f7f7 inset;
+                box-shadow: 0 1px 0 #f7f7f7 inset;
+                font-weight: bold;
+                height: 25px;
+                float: left;
+                vertical-align: middle;
+            }
+
+            .loop-header {
+                color: #cccccc;
+                font-size: 15px;
+                font-weight: bold;
+                font-family: sans-serif;
+            }
+
+            .dynamicContent #loader {
+                height: 0;
+                overflow: hidden;
+                line-height: 60px;
+            }
+
+                .dynamicContent #loader.active {
+                    width: 710px;
+                    height: auto;
+                }
+
+                .dynamicContent #loader img {
+                    vertical-align: text-bottom;
+                }
+
+            .bgdiv {
+                border: 2px solid #73ad21;
+                border-radius: 5px;
+                display: block;
+                float: left;
+                height: 300px;
+                margin: 2px;
+                padding: 21px;
+                width: 400px;
+            }
+
+            .smdiv {
+                border: 2px solid #73AD21;
+                border-radius: 5px;
+                display: block;
+                float: left;
+                padding: 24px;
+                margin: 2px;
+                width: 300px;
+                height: 250px;
+            }
+        </style>
+
+
+    }
+
+    @*<div ng-controller="SearchController">
+            <section>
+                <ul class="nav nav-tabs">
+                    <li ng-class="{active:isSelected(1)}"><a href ng-click="selectTab(1)">Description</a></li>
+                    <li ng-class="{active:isSelected(2)}"><a href ng-click="selectTab(2)">test2</a></li>
+                </ul>
+
+            </section>
+            <div class="panel" ng-show="isSelected(1)">This is Description</div>
+            <div class="panel" ng-show="isSelected(2)">This is test</div>
+        </div>*@
+
+
+
+    <h1 style="color: royalblue">
+        <b>TECHNOCADEMY ONLINE TUTORIAL</b>
+    </h1>
+
+    <div class="panel" ng-controller="SearchController">
+           
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-lg-3 col-md-3">
+                    <div class="pull-left">                        
+                        <div class="input-group add-on">
+                                <input type="text" class="form-control" placeholder="Search" ng-model="searchSentence">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="SearchResult(searchSentence)"><i class="glyphicon glyphicon-search"></i></button>
+                                </div>
+                            </div>                        
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-9">
+                    <div class="pull-rigth">
+                            <div class="input-group">
+                                <span class="input-group-addon"><b>Filter By: </b></span>
+
+                                <select class="form-control" ng-options="course as course.CourseName for course in courseList" ng-model="course" ng-change="sortedByCourse(course.CourseId,course.CourseName)"></select>
+
+                                @*<select class="form-control">
+                                    <option ng-model="course" ng-click="sortedByCourse(0,'General')">Select</option>
+                                    <option ng-repeat="course in courseList" value="{{course.CourseId}}" ng-model="course" ng-click="sortedByCourse(course.CourseId,course.CourseName)">{{course.CourseName}}</option>
+                                </select>*@
+                            </div>                      
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="page-header">
+                        <div>
+                            <span class="loop-header">CATEGORY:</span>
+                            <label>{{setCategory}}</label>
+                        </div>
+
+                        <div class="grid-header">
+                            <span class="prefix">View:</span> &nbsp;
+                            <a class="list-inline" data-type="list-small" title="List View with Small Thumbnail" href="" ng-class="{active:isSelected(1)}"><span class="glyphicon glyphicon-list" ng-click="selectTab(1)"></span><i></i></a> &nbsp;
+                            <a class="list-inline" data-type="list-medium" title="List View with Medium Thumbnail" href="" ng-class="{active:isSelected(2)}"><span class="glyphicon glyphicon-th-list" ng-click="selectTab(2)"></span><i></i></a> &nbsp;
+                            <a class="list-inline" data-type="grid-large" title="Grid View with Large Thumbnail" href="" ng-class="{active:isSelected(3)}"><span class="glyphicon glyphicon-th-large" ng-click="selectTab(3)"></span><i></i></a> &nbsp;
+                            <a class="list-inline" data-type="grid-mini" title="Grid View with Mini Thumbnail" href="" ng-class="{active:isSelected(4)}"><span class="glyphicon glyphicon-th" ng-click="selectTab(4)"></span><i></i></a>
+                        </div>
+        </div>
+                </div>
+            </div>
+
+            
+
+            
+
+           
+        </div>
+
+
+        
+
+       
+   
+  
+
+   
+
+
+    <div class="panel-body">
+        <div class="dynamicContent">
+            <div ng-show="isSelected(1)">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Video</th>
+                            <th>VideoName</th>
+                            <th>Category</th>
+                            <th>Label</th>
+                            <th>Ratings</th>
+                            <th>Lecturer</th>
+                            <th>Publish Date</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="video in VideoList">
+                        <tr class="info">
+                            <td>
+                                <video width="200" height="100" controls>
+                                    <source ng-src="{{video.FilePath}}" type="video/mp4" />
+                                </video>
+                            </td>
+                            <td>{{video.VideoName}}</td>
+                            <td ng-repeat="category in categoryList" ng-if="category.CategoryId==video.CategoryId">
+                                {{category.CategoryName}}
+                            </td>
+                            <td>{{video.Label}}</td>
+                            <td>
+                                <div class="ttl_{{video.VideoUploadId}}">
+                                    <table><tr ng-show="rating(video.Ratings,video.VideoUploadId)"> </tr></table>
+                                </div>
+                            </td>
+
+                            <td>{{video.Lecturer}}</td>
+                            <td ng-date>{{DateSplit(video.PublishDate) | date: 'dd-MM-yyyy'}}</td>
+                        </tr>
+                        <tr ng-if="VideoList.length==0">
+                            <td colspan="4" class="text-center">
+                                <h3>There have no list of Video.</h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="isSelected(2)">
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Video</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody ng-repeat="video in VideoList">
+                        <tr class="info">
+                            <td>
+                                <video width="250" height="140" controls>
+                                    <source ng-src="{{video.FilePath}}" type="video/mp4" />
+                                </video>
+                            </td>
+                            <td>
+                                <div>
+                                    <h5><b>Video Name: {{video.VideoName}} </b></h5>
+                                </div>
+                                <div ng-repeat="category in categoryList" ng-if="category.CategoryId==video.CategoryId">
+                                    Category: {{category.CategoryName}}
+                                </div>
+                                <div>Label: {{video.Label}}</div>
+                                <div class="list_{{video.VideoUploadId}}">
+                                    <table><tr ng-show="ListRating(video.Ratings,video.VideoUploadId)"> </tr></table>
+                                </div>
+                                <div>Lecturer: {{video.Lecturer}}</div>
+                                <div ng-date>Published: {{DateSplit(video.PublishDate) | date: 'dd-MM-yyyy'}}</div>
+                            </td>
+
+                        </tr>
+                        <tr ng-if="VideoList.length==0">
+                            <td colspan="4" class="text-center">
+                                <h3>There have no list of Video.</h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="isSelected(3)">
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="bgdiv" ng-repeat="video in VideoList">
+                                <video width="350" height="220" controls>
+                                    <source ng-src="{{video.FilePath}}" type="video/mp4" />
+                                </video>
+                                <h4 style="color: red;"><b> {{video.VideoName}} </b></h4>
+                            </td>
+                        </tr>
+                        <tr ng-if="VideoList.length==0">
+                            <td colspan="4" class="text-center">
+                                <h3>There have no list of Video.</h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="isSelected(4)">
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="smdiv" ng-repeat="video in VideoList">
+                                <video width="250" height="140" controls>
+                                    <source ng-src="{{video.FilePath}}" type="video/mp4" />
+                                </video>
+                                <h4 style="color: red;"><b> {{video.VideoName}} </b></h4>
+                            </td>
+                        </tr>
+                        <tr ng-if="VideoList.length==0">
+                            <td colspan="4" class="text-center">
+                                <h3>There have no list of Video.</h3>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="" id="loader">
+                <img src="~/Content/icon/loading.gif" height="40" width="40" />LOADING...
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+    @section scripts {
+
+        <script src="~/Scripts/ScrollMagic.js"></script>
+
+        <script src="~/CustomScript/Angular/app.js"></script>
+        <script src="~/CustomScript/Angular/SearchCtrl.js"></script>
+
+    }

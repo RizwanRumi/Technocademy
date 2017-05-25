@@ -1,0 +1,5 @@
+Tools:
+Visual Studio 2013
+
+nb:
+video files has been deleted for upload in github.
